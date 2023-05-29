@@ -61,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 30,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -200,8 +200,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   final Email = emailregister.text;
                   final Pass = passregister.text;
 
-                  final newuser =
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(email: Email, password: Pass).then((value) {
+                  final newuser = FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: Email, password: Pass)
+                      .then((value) {
                     FirebaseFirestore.instance.collection('UserData')
                       ..doc(value.user!.uid).set({
                         'id': value.user!.uid,
@@ -215,7 +217,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   });
 
                   if (newuser != null) {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
                       return const LoginPage();
                     }));
                   } else {
@@ -255,7 +258,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'Alredy have an accounts',
                   style: TextStyle(
-                      fontSize: 24, color: Colors.blue, fontWeight: FontWeight.w500, fontFamily: 'JosefinSans'),
+                      fontSize: 24,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'JosefinSans'),
                 ),
               ),
             ),
@@ -289,7 +295,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 InkWell(
                   onTap: pick_image,
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(
                         Icons.photo,
@@ -304,7 +310,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 InkWell(
                   onTap: () {},
-                  child: const Row(
+                  child: Row(
                     children: [
                       Icon(
                         Icons.camera,
