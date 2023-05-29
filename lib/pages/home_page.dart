@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else {
-                  return const Column(
+                  return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
