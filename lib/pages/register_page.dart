@@ -4,10 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker_web/image_picker_web.dart';
-import '../model/categorise_filter.dart';
+import 'package:image_cropper/image_cropper.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:project4/my_app.dart';
+import 'package:uuid/uuid.dart';
+
 import '../componant/text_field1.dart';
-import 'login_page.dart';
+import '../model/categorise_filter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,6 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final phonenumber = TextEditingController();
   final companypositin = TextEditingController(text: 'Company Position');
   final bool _isFocused = false;
+  File? selectedImage;
+  bool isLoading = false;
 
   late String imageUrl;
   static bool imageAvailable = false;
@@ -38,18 +44,72 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void pick_image() async {
-    final image = await ImagePickerWeb.getImageAsFile();
-    final ref = FirebaseStorage.instance.ref().child("bills/55/33.jpeg");
-    await ref.putFile(image! as File);
-    final url = await ref.getDownloadURL();
-    setState(() {
-      imageUrl = url;
-      imageAvailable = true;
-    });
+  imagePickerfromGalary() async {
+    final picker = ImagePicker();
 
-    Navigator.pop(context);
+    final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedImage!.path,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        )
+      ],
+    );
+    if (croppedFile != null) {
+      setState(
+        () {
+          selectedImage = File(croppedFile.path);
+        },
+      );
+    }
   }
+
+  imagePickerfromCamera() async {
+    final picker = ImagePicker();
+
+    final XFile? pickedImage = await picker.pickImage(source: ImageSource.camera);
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedImage!.path,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        )
+      ],
+    );
+    if (croppedFile != null) {
+      setState(
+        () {
+          selectedImage = File(croppedFile.path);
+        },
+      );
+    }
+  }
+
+  // void pick_image() async {
+  //   // final image = await ImagePickerWeb.getImageAsFile();
+  //   final ref = FirebaseStorage.instance.ref().child("bills/55/33.jpeg");
+  //   await ref.putFile(image! as File);
+  //   final url = await ref.getDownloadURL();
+  //   setState(() {
+  //     imageUrl = url;
+  //     imageAvailable = true;
+  //   });
+
+  //   Navigator.pop(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +121,9 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 30,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text(
                   'Task Management',
                   style: TextStyle(
@@ -103,39 +163,39 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(
                   height: 12,
                 ),
-                // Stack(
-                //   children: [
-                //     InkWell(
-                //       onTap: () {
-                //         ShowDialogFunction2(context);
-                //       },
-                //       child: Container(
-                //           height: 100,
-                //           width: 100,
-                //           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                //           clipBehavior: Clip.hardEdge,
-                //           child: imageAvailable
-                //               ? Image.network(
-                //                   imageUrl,
-                //                   fit: BoxFit.cover,
-                //                 )
-                //               : Image.network(
-                //                   'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg',
-                //                   fit: BoxFit.cover,
-                //                 )),
-                //     ),
-                //     const Positioned(
-                //         bottom: 0,
-                //         right: 0,
-                //         child: CircleAvatar(
-                //             backgroundColor: Color.fromARGB(255, 245, 97, 86),
-                //             radius: 18,
-                //             child: Icon(
-                //               Icons.camera_enhance,
-                //               color: Colors.white,
-                //             )))
-                //   ],
-                // ),
+                Stack(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        ShowDialogFunction2(context);
+                      },
+                      child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                          clipBehavior: Clip.hardEdge,
+                          child: selectedImage != null
+                              ? Image.file(
+                                  selectedImage!,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg',
+                                  fit: BoxFit.cover,
+                                )),
+                    ),
+                    const Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 245, 97, 86),
+                            radius: 18,
+                            child: Icon(
+                              Icons.camera_enhance,
+                              color: Colors.white,
+                            )))
+                  ],
+                ),
                 const SizedBox(
                   height: 28,
                 ),
@@ -191,61 +251,72 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 30,
             ),
-            InkWell(
-              onTap: () async {
-                try {
-                  final username1 = username.text;
-                  final phonenumber1 = phonenumber.text;
-                  final joptitle1 = companypositin.text;
-                  final Email = emailregister.text;
-                  final Pass = passregister.text;
+            isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.amber,
+                    ),
+                  )
+                : InkWell(
+                    onTap: () async {
+                      try {
+                        final username1 = username.text;
+                        final phonenumber1 = phonenumber.text;
+                        final joptitle1 = companypositin.text;
+                        final Email = emailregister.text;
+                        final Pass = passregister.text;
 
-                  final newuser =
-                      FirebaseAuth.instance.createUserWithEmailAndPassword(email: Email, password: Pass).then((value) {
-                    FirebaseFirestore.instance.collection('UserData')
-                      ..doc(value.user!.uid).set({
-                        'id': value.user!.uid,
-                        'email': value.user!.email,
-                        'name': username1,
-                        'phonenumber': phonenumber1,
-                        'companypositin': joptitle1,
-                        // 'image_url': imageUrl
-                        'CreateAt': Timestamp.now(),
-                      });
-                  });
+                        final ref =
+                            FirebaseStorage.instance.ref().child('userImage').child('${const Uuid().v4()}.v4.jpg');
+                        await ref.putFile(selectedImage!);
+                        final url = await ref.getDownloadURL();
 
-                  if (newuser != null) {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                      return const LoginPage();
-                    }));
-                  } else {
-                    print('false input');
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },
-              child: Container(
-                alignment: Alignment.center,
-                height: 65,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(34),
-                    gradient: const LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Color(0xff1382E9), Color(0xff63B8C3)])),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                    fontFamily: 'JosefinSans',
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white,
+                        final newuser = FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(email: Email, password: Pass)
+                            .then((value) {
+                          FirebaseFirestore.instance.collection('UserData')
+                            ..doc(value.user!.uid).set({
+                              'id': value.user!.uid,
+                              'email': value.user!.email,
+                              'name': username1,
+                              'phonenumber': phonenumber1,
+                              'companypositin': joptitle1,
+                              'image_url': url,
+                              'CreateAt': Timestamp.now(),
+                            });
+                        });
+
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                          return const MyApp();
+                        }));
+                      } catch (e) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                        print(e);
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 65,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(34),
+                          gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Color(0xff1382E9), Color(0xff63B8C3)])),
+                      child: const Text(
+                        'Register',
+                        style: TextStyle(
+                          fontFamily: 'JosefinSans',
+                          fontSize: 24,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
             const SizedBox(
               height: 30,
             ),
@@ -288,9 +359,12 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 InkWell(
-                  onTap: pick_image,
-                  child: const Row(
-                    children: [
+                  onTap: () {
+                    imagePickerfromGalary();
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: const [
                       Icon(
                         Icons.photo,
                         color: Color.fromARGB(255, 41, 61, 66),
@@ -302,21 +376,51 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.camera,
-                        color: Color.fromARGB(255, 41, 61, 66),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text('Take picture'),
-                    ],
+                Container(
+                  child: InkWell(
+                    onTap: () {
+                      imagePickerfromCamera();
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.camera,
+                          color: Color.fromARGB(255, 41, 61, 66),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text('Take picture'),
+                      ],
+                    ),
                   ),
                 ),
+                selectedImage != null
+                    ? Container(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedImage = null;
+                            });
+
+                            Navigator.pop(context);
+                          },
+                          child: Row(
+                            children: const [
+                              Icon(
+                                Icons.close,
+                                color: Color.fromARGB(255, 218, 35, 35),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text('Remove picture'),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox()
               ],
             ),
           ),

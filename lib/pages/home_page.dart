@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project4/componant/text1.dart';
 import 'package:project4/pages/task_details_page.dart';
 import 'package:uuid/uuid.dart';
+
 import '../componant/drawer.dart';
 import '../model/categorise_filter.dart';
 
@@ -52,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               fit: BoxFit.cover)),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 7, 218, 255),
+          backgroundColor: Color.fromARGB(255, 34, 137, 255),
           onPressed: () {
             setState(() {
               mytest();
@@ -62,46 +63,32 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Colors.transparent,
         extendBodyBehindAppBar: true,
-        drawer: const Drawer1(),
         appBar: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).padding.top, 56),
           child: ClipRRect(
             child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 1, sigmaY: 10),
                 child: AppBar(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(25.0), bottomRight: Radius.circular(25.0))),
-                  elevation: 0,
-                  backgroundColor: Colors.black.withOpacity(0.1),
-                  actions: [
-                    IconButton(
+                    leading: IconButton(
                         onPressed: () {
                           ShowDialogFunction(context);
                         },
                         icon: const Icon(
                           Icons.filter_list_sharp,
                           color: Colors.white,
-                        ))
-                  ],
-                  centerTitle: true,
-                  title: const Text(
-                    'Task Management',
-                    style: TextStyle(
-                      shadows: [
-                        BoxShadow(
-                            offset: Offset(0, 5),
-                            color: Color.fromARGB(47, 151, 226, 247),
-                            spreadRadius: 1,
-                            blurRadius: 7)
-                      ],
-                      fontFamily: 'JosefinSans',
-                      color: Color(0xff386063),
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                )),
+                        )),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(25.0), bottomRight: Radius.circular(25.0))),
+                    elevation: 0,
+                    backgroundColor: Colors.black.withOpacity(0.1),
+                    centerTitle: true,
+                    title: const Text1(
+                      color: Color.fromARGB(255, 37, 36, 36),
+                      text: 'TaskManegment',
+                      fontweights: FontWeight.w800,
+                      fontsized1: 20,
+                    ))),
           ),
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -129,12 +116,12 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else {
-                  return const Column(
+                  return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Icon(
                             Icons.search_off,
                             color: Colors.white,
@@ -456,7 +443,10 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Close'),
+                child: Text(
+                  'Close',
+                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                ),
               ),
               TextButton(
                 onPressed: () {

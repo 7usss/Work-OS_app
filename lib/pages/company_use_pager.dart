@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../componant/drawer.dart';
@@ -36,7 +35,6 @@ class _CompanyUserPageState extends State<CompanyUserPage> {
                 fit: BoxFit.cover)),
         child: Scaffold(
           extendBodyBehindAppBar: true,
-          drawer: const Drawer1(),
           appBar: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).padding.top, 56),
             child: ClipRRect(
@@ -74,7 +72,7 @@ class _CompanyUserPageState extends State<CompanyUserPage> {
             stream: FirebaseFirestore.instance.collection('UserData').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.connectionState == ConnectionState.active) {
@@ -92,11 +90,11 @@ class _CompanyUserPageState extends State<CompanyUserPage> {
                           );
                         });
                   } else {
-                    return Text('no Employes');
+                    return const Text('no Employes');
                   }
                 }
               }
-              return Text('somthing went wrong');
+              return const Text('somthing went wrong');
             },
           ),
         ));

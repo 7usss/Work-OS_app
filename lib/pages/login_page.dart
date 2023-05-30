@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project4/pages/home_page.dart';
-
 import 'package:project4/pages/register_page.dart';
 
 import '../componant/text_field1.dart';
@@ -33,11 +32,11 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             const SizedBox(
-              height: 30,
+              height: 50,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text(
                   'Task Management',
                   style: TextStyle(
@@ -48,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
                           spreadRadius: 1,
                           blurRadius: 7)
                     ],
-                    fontFamily: 'JosefinSans',
                     color: Color(0xff386063),
                     fontSize: 26,
                     fontWeight: FontWeight.w900,
@@ -56,22 +54,21 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 160,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
+                const Text(
                   'Log In',
                   style: TextStyle(
-                    fontFamily: 'JosefinSans',
                     color: Color.fromARGB(255, 2, 178, 248),
-                    fontSize: 26,
-                    fontWeight: FontWeight.w900,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 34,
                 ),
                 TextField1(
@@ -82,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon1: Icons.person_2_sharp,
                   hint1: 'Email',
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 34,
                 ),
                 TextField1(
@@ -95,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ],
             ),
-            Spacer(
+            const Spacer(
               flex: 6,
             ),
             InkWell(
@@ -103,10 +100,10 @@ class _LoginPageState extends State<LoginPage> {
                 try {
                   final email_ = emaillogin.text;
                   final password_ = passlogin.text;
-                  final user =
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email_, password: password_);
+
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(email: email_, password: password_);
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                    return HomePage();
+                    return const HomePage();
                   }));
                 } catch (e) {
                   print(e);
@@ -122,11 +119,10 @@ class _LoginPageState extends State<LoginPage> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [Color(0xff1382E9), Color(0xff63B8C3)])),
-                child: Text(
+                child: const Text(
                   'Log In',
                   style: TextStyle(
-                    fontFamily: 'JosefinSans',
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: FontWeight.normal,
                     color: Colors.white,
                   ),
@@ -142,20 +138,23 @@ class _LoginPageState extends State<LoginPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return RegisterPage();
+                      return const RegisterPage();
                     },
                   ),
                 );
               },
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Dont have an accounts ',
                   style: TextStyle(
-                      fontSize: 24, color: Colors.blue, fontWeight: FontWeight.w500, fontFamily: 'JosefinSans'),
+                    fontSize: 24,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 1,
             ),
           ],

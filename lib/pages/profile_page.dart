@@ -2,11 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../componant/drawer.dart';
 import 'login_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -19,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String? user_name;
   String? user_phoneNumber;
   String? user_jop;
+  String? user_image;
   String? user_joinDate;
   bool isSameuser = false;
 
@@ -39,24 +39,27 @@ class _ProfilePageState extends State<ProfilePage> {
   // }
   getData() async {
     User? user = _auth.currentUser;
-    String uid = user!.uid;
-    try {
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('UserData').doc(uid).get();
-      if (userDoc == null) {
-        return;
-      } else {
-        setState(() {
-          user_name = userDoc.get('name');
-          user_email = userDoc.get('email');
-          user_phoneNumber = userDoc.get('phonenumber');
-          user_jop = userDoc.get('companypositin');
-          Timestamp userJointimestamp = userDoc.get('CreateAt');
-          var userJoindatestring = userJointimestamp.toDate();
-          user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
-        });
+    if (user != null) {
+      String uid = user.uid;
+      try {
+        final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('UserData').doc(uid).get();
+        if (userDoc == null) {
+          return;
+        } else {
+          setState(() {
+            user_name = userDoc.get('name');
+            user_email = userDoc.get('email');
+            user_image = userDoc.get('image_url');
+            user_phoneNumber = userDoc.get('phonenumber');
+            user_jop = userDoc.get('companypositin');
+            Timestamp userJointimestamp = userDoc.get('CreateAt');
+            var userJoindatestring = userJointimestamp.toDate();
+            user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
+          });
+        }
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -82,21 +85,15 @@ class _ProfilePageState extends State<ProfilePage> {
           title: const Text(
             'Profile',
             style: TextStyle(
-              shadows: [
-                BoxShadow(
-                    offset: Offset(0, 5), color: Color.fromARGB(47, 151, 226, 247), spreadRadius: 1, blurRadius: 7)
-              ],
-              fontFamily: 'JosefinSans',
               color: Color.fromARGB(255, 255, 255, 255),
               fontSize: 26,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w200,
             ),
           ),
         ),
-        drawer: const Drawer1(),
         body: Center(
           child: Container(
-            margin: const EdgeInsets.all(24),
+            margin: const EdgeInsets.all(12),
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -111,15 +108,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(
                       height: 12,
                     ),
-                    // const CircleAvatar(
-                    //   maxRadius: 55,
-                    //   backgroundColor: Colors.blueGrey,
-                    //   child: CircleAvatar(
-                    //     backgroundImage: NetworkImage(
-                    //         'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
-                    //     radius: 50,
-                    //   ),
-                    // ),
+                    user_image == null
+                        ? const CircleAvatar(
+                            maxRadius: 55,
+                            backgroundColor: Colors.blueGrey,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  'https://t3.ftcdn.net/jpg/03/39/45/96/360_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
+                              radius: 50,
+                            ),
+                          )
+                        : CircleAvatar(
+                            maxRadius: 55,
+                            backgroundColor: Colors.blueGrey,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(user_image!),
+                              radius: 50,
+                            ),
+                          ),
                     const SizedBox(
                       height: 4,
                     ),
@@ -142,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               color: Color.fromARGB(255, 4, 66, 107),
                               fontStyle: FontStyle.italic),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                         const Text(
@@ -153,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               color: Color.fromARGB(255, 4, 66, 107),
                               fontStyle: FontStyle.italic),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                       ],
@@ -162,6 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       user_joinDate == null ? '' : user_joinDate!,
                       style: const TextStyle(
                           fontSize: 22,
+                          overflow: TextOverflow.fade,
                           fontWeight: FontWeight.w400,
                           color: Color.fromARGB(255, 4, 66, 107),
                           fontStyle: FontStyle.italic),
@@ -295,7 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   gradient: const LinearGradient(
                                       begin: Alignment.centerLeft,
                                       end: Alignment.centerRight,
-                                      colors: [Color.fromARGB(255, 194, 0, 32), Color.fromARGB(255, 243, 56, 56)])),
+                                      colors: [Color.fromARGB(201, 241, 9, 9), Color.fromARGB(192, 221, 4, 4)])),
                               child: const Text(
                                 'Log Out',
                                 style: TextStyle(

@@ -1,7 +1,4 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class company_user_list extends StatefulWidget {
   final String user_id;
@@ -24,22 +21,22 @@ class company_user_list extends StatefulWidget {
 }
 
 class _company_user_listState extends State<company_user_list> {
-  void mailfun() async {
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: '${widget.user_email}',
-    );
-    String url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  // void mailfun() async {
+  //   final Uri params = Uri(
+  //     scheme: 'mailto',
+  //     path: widget.user_email,
+  //   );
+  //   String url = params.toString();
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
-  void whatsUppfun() async {
-    await launch('https://wa.me/${widget.user_phoneNumber}?text=Hi');
-  }
+  // void whatsUppfun() async {
+  //   await launch('https://wa.me/${widget.user_phoneNumber}?text=Hi');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +59,7 @@ class _company_user_listState extends State<company_user_list> {
                 height: 50,
                 width: 50,
                 child: InkWell(
-                  onTap: whatsUppfun,
+                  // onTap: whatsUppfun,
                   child: Image.network(
                     'https://cdn.discordapp.com/attachments/679377927611351119/1077036608500539432/86.png',
                     fit: BoxFit.cover,
@@ -77,15 +74,15 @@ class _company_user_listState extends State<company_user_list> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.user_name}',
+                  widget.user_name,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
                 Text(
-                  '${widget.user_jop}',
+                  widget.user_jop,
                   style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                 ),
                 Text(
-                  '${widget.user_phoneNumber}',
+                  widget.user_phoneNumber,
                   style: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                 )
               ],
@@ -94,7 +91,7 @@ class _company_user_listState extends State<company_user_list> {
               flex: 14,
             ),
             InkWell(
-              onTap: mailfun,
+              // onTap: mailfun,
               child: const Icon(
                 Icons.email_outlined,
                 color: Color.fromARGB(255, 0, 40, 66),
