@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -35,19 +34,15 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
 
   getdata2() async {
     final DocumentSnapshot taskDoc = await FirebaseFirestore.instance.collection('Tasks').doc(widget.task__id).get();
-    if (taskDoc == null) {
-      return;
-    } else {
-      setState(() {
-        task_title = taskDoc.get('taskTitle');
-        task_description = taskDoc.get('taskDescription');
-        task_deadline = taskDoc.get('deadlineDate');
-        taskstate = taskDoc.get('isDone');
-        Timestamp taskUploadtimestamp = taskDoc.get('createdAt');
-        var taskUploadtoDate = taskUploadtimestamp.toDate();
-        task_uploadDate = '${taskUploadtoDate.year}-${taskUploadtoDate.month}-${taskUploadtoDate.day}';
-      });
-    }
+    setState(() {
+      task_title = taskDoc.get('taskTitle');
+      task_description = taskDoc.get('taskDescription');
+      task_deadline = taskDoc.get('deadlineDate');
+      taskstate = taskDoc.get('isDone');
+      Timestamp taskUploadtimestamp = taskDoc.get('createdAt');
+      var taskUploadtoDate = taskUploadtimestamp.toDate();
+      task_uploadDate = '${taskUploadtoDate.year}-${taskUploadtoDate.month}-${taskUploadtoDate.day}';
+    });
   }
 
   getData() async {
@@ -57,17 +52,13 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     try {
       final DocumentSnapshot userDoc =
           await FirebaseFirestore.instance.collection('UserData').doc(widget.taskuploadedBy).get();
-      if (userDoc == null) {
-        return;
-      } else {
-        setState(() {
-          user_name = userDoc.get('name');
-          user_jop = userDoc.get('companypositin');
-          // Timestamp userJointimestamp = userDoc.get('CreateAt');
-          // var userJoindatestring = userJointimestamp.toDate();
-          // user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
-        });
-      }
+      setState(() {
+        user_name = userDoc.get('name');
+        user_jop = userDoc.get('companypositin');
+        // Timestamp userJointimestamp = userDoc.get('CreateAt');
+        // var userJoindatestring = userJointimestamp.toDate();
+        // user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
+      });
     } catch (e) {
       print(e);
     }
@@ -78,19 +69,27 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
     return Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                  'https://cdn.discordapp.com/attachments/679377927611351119/1076211185248108664/Frame_11.png',
-                ),
-                fit: BoxFit.cover)),
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xff1382E9), Color(0xff63B8C3)])),
         child: Scaffold(
-            extendBodyBehindAppBar: true,
+            extendBodyBehindAppBar: false,
             appBar: PreferredSize(
               preferredSize: Size(MediaQuery.of(context).padding.top, 56),
               child: ClipRRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 1, sigmaY: 10),
                   child: AppBar(
+                    leading: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                    ),
                     shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(25.0), bottomRight: Radius.circular(25.0))),
@@ -100,14 +99,6 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                     title: const Text(
                       'Task details',
                       style: TextStyle(
-                        shadows: [
-                          BoxShadow(
-                              offset: Offset(0, 5),
-                              color: Color.fromARGB(47, 151, 226, 247),
-                              spreadRadius: 1,
-                              blurRadius: 7)
-                        ],
-                        fontFamily: 'JosefinSans',
                         color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
@@ -259,7 +250,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                                         fontSize: 16.0);
                                   }
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Done',
                                   style: TextStyle(
                                     fontStyle: FontStyle.italic,
@@ -267,16 +258,16 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
                               Opacity(
                                   opacity: taskstate == true ? 1 : 0,
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.check_box,
                                     color: Colors.green,
                                   )),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               InkWell(
@@ -302,7 +293,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                                         fontSize: 16.0);
                                   }
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Not Done',
                                   style: TextStyle(
                                     fontStyle: FontStyle.italic,
@@ -310,12 +301,12 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
                               Opacity(
                                   opacity: taskstate == false ? 1 : 0,
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.check_box,
                                     color: Colors.red,
                                   )),
@@ -339,7 +330,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
                             padding: const EdgeInsets.all(12),
                             child: Text(
                               task_description == null ? '' : task_description!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.normal, color: Color.fromARGB(255, 4, 66, 107)),
                               overflow: TextOverflow.clip,
                             ),

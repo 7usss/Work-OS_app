@@ -29,14 +29,14 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28),
-        child: Column(
+        child: ListView(
           children: [
             const SizedBox(
               height: 50,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
                   'Task Management',
                   style: TextStyle(
@@ -92,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                 )
               ],
             ),
-            const Spacer(
-              flex: 6,
+            const SizedBox(
+              height: 42,
             ),
             InkWell(
               onTap: () async {

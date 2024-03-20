@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../componant/drawer.dart';
 import '../componant/user_list_widgt.dart';
 
 class CompanyUserPage extends StatefulWidget {
@@ -28,11 +27,10 @@ class _CompanyUserPageState extends State<CompanyUserPage> {
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                  'https://cdn.discordapp.com/attachments/679377927611351119/1076211185248108664/Frame_11.png',
-                ),
-                fit: BoxFit.cover)),
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xff1382E9), Color(0xff63B8C3)])),
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: PreferredSize(
@@ -50,13 +48,6 @@ class _CompanyUserPageState extends State<CompanyUserPage> {
                   title: const Text(
                     'All Employes',
                     style: TextStyle(
-                      shadows: [
-                        BoxShadow(
-                            offset: Offset(0, 5),
-                            color: Color.fromARGB(47, 151, 226, 247),
-                            spreadRadius: 1,
-                            blurRadius: 7)
-                      ],
                       fontFamily: 'JosefinSans',
                       color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 26,

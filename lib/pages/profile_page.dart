@@ -43,20 +43,16 @@ class _ProfilePageState extends State<ProfilePage> {
       String uid = user.uid;
       try {
         final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('UserData').doc(uid).get();
-        if (userDoc == null) {
-          return;
-        } else {
-          setState(() {
-            user_name = userDoc.get('name');
-            user_email = userDoc.get('email');
-            user_image = userDoc.get('image_url');
-            user_phoneNumber = userDoc.get('phonenumber');
-            user_jop = userDoc.get('companypositin');
-            Timestamp userJointimestamp = userDoc.get('CreateAt');
-            var userJoindatestring = userJointimestamp.toDate();
-            user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
-          });
-        }
+        setState(() {
+          user_name = userDoc.get('name');
+          user_email = userDoc.get('email');
+          user_image = userDoc.get('image_url');
+          user_phoneNumber = userDoc.get('phonenumber');
+          user_jop = userDoc.get('companypositin');
+          Timestamp userJointimestamp = userDoc.get('CreateAt');
+          var userJoindatestring = userJointimestamp.toDate();
+          user_joinDate = '${userJoindatestring.year}-${userJoindatestring.month}-${userJoindatestring.day}';
+        });
       } catch (e) {
         print(e);
       }
@@ -69,11 +65,10 @@ class _ProfilePageState extends State<ProfilePage> {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(
-                'https://cdn.discordapp.com/attachments/679377927611351119/1076211185248108664/Frame_11.png',
-              ),
-              fit: BoxFit.cover)),
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Color.fromARGB(255, 77, 169, 255), Color(0xff63B8C3)])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -87,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: TextStyle(
               color: Color.fromARGB(255, 255, 255, 255),
               fontSize: 26,
-              fontWeight: FontWeight.w200,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ),
@@ -105,6 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.edit,
+                          color: Colors.blueGrey,
+                        ),
+                      ],
+                    ),
                     const SizedBox(
                       height: 12,
                     ),
@@ -176,6 +179,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     const Divider(
                       thickness: 2,
                     ),
+                    const SizedBox(
+                      height: 12,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -211,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         const SizedBox(
-                          height: 12,
+                          height: 4,
                         ),
                         Row(
                           children: [

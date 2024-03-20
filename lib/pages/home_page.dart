@@ -8,7 +8,6 @@ import 'package:project4/componant/text1.dart';
 import 'package:project4/pages/task_details_page.dart';
 import 'package:uuid/uuid.dart';
 
-import '../componant/drawer.dart';
 import '../model/categorise_filter.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,14 +45,13 @@ class _HomePageState extends State<HomePage> {
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(
-                'https://cdn.discordapp.com/attachments/679377927611351119/1076211185248108664/Frame_11.png',
-              ),
-              fit: BoxFit.cover)),
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Color.fromARGB(255, 77, 169, 255), Color(0xff63B8C3)])),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(255, 34, 137, 255),
+          backgroundColor: Colors.blue.shade300,
           onPressed: () {
             setState(() {
               mytest();
@@ -81,13 +79,13 @@ class _HomePageState extends State<HomePage> {
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(25.0), bottomRight: Radius.circular(25.0))),
                     elevation: 0,
-                    backgroundColor: Colors.black.withOpacity(0.1),
+                    backgroundColor: const Color.fromARGB(255, 172, 30, 30).withOpacity(0.1),
                     centerTitle: true,
                     title: const Text1(
-                      color: Color.fromARGB(255, 37, 36, 36),
-                      text: 'TaskManegment',
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      text: 'All Tasks',
                       fontweights: FontWeight.w800,
-                      fontsized1: 20,
+                      fontsized1: 26,
                     ))),
           ),
         ),
@@ -116,12 +114,12 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else {
-                  return Column(
+                  return const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.search_off,
                             color: Colors.white,
@@ -132,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
-                                  fontSize: 26,
+                                  fontSize: 22,
                                   fontStyle: FontStyle.italic),
                             ),
                           ),
@@ -443,7 +441,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
+                child: const Text(
                   'Close',
                   style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
                 ),
@@ -454,8 +452,13 @@ class _HomePageState extends State<HomePage> {
                     categoryfilter1 = null;
                   });
                 },
-                child: const Text('Cancele Filter'),
-              ),
+                child: const Text(
+                  'Cancele Filter',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              )
             ],
           );
         });
@@ -523,47 +526,46 @@ class _TaskInHomeState extends State<TaskInHome> {
         showDialog(
             context: context,
             builder: (context) {
-              return Center(
-                child: AlertDialog(
-                  actions: [
-                    InkWell(
-                      onTap: () {
-                        final FirebaseAuth auth = FirebaseAuth.instance;
-                        User? user = auth.currentUser;
-                        String uid = user!.uid;
-                        if (uid == widget.task_uploadBy) {
-                          FirebaseFirestore.instance.collection('Tasks').doc(widget.task_id).delete();
-                          Navigator.pop(context);
-                          Fluttertoast.showToast(
-                              msg: "The task  delete successfully",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              textColor: const Color.fromARGB(255, 255, 255, 255),
-                              timeInSecForIosWeb: 4,
-                              fontSize: 16.0);
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: "You dont have permission to delete this task",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              textColor: const Color.fromARGB(255, 255, 255, 255),
-                              timeInSecForIosWeb: 4,
-                              webBgColor: 'linear-gradient(to right, #FD3A3D, #E63E40)',
-                              fontSize: 16.0);
-                        }
-                      },
-                      child: const Center(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 24,
-                          ),
+              return AlertDialog(
+                title: const Center(child: Text('Are you sure')),
+                actions: [
+                  InkWell(
+                    onTap: () {
+                      final FirebaseAuth auth = FirebaseAuth.instance;
+                      User? user = auth.currentUser;
+                      String uid = user!.uid;
+                      if (uid == widget.task_uploadBy) {
+                        FirebaseFirestore.instance.collection('Tasks').doc(widget.task_id).delete();
+                        Navigator.pop(context);
+                        Fluttertoast.showToast(
+                            msg: "The task  delete successfully",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            textColor: const Color.fromARGB(255, 255, 255, 255),
+                            timeInSecForIosWeb: 4,
+                            fontSize: 16.0);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "You dont have permission to delete this task",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            textColor: const Color.fromARGB(255, 255, 255, 255),
+                            timeInSecForIosWeb: 4,
+                            webBgColor: 'linear-gradient(to right, #FD3A3D, #E63E40)',
+                            fontSize: 16.0);
+                      }
+                    },
+                    child: const Center(
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
             });
       },
@@ -606,9 +608,13 @@ class _TaskInHomeState extends State<TaskInHome> {
                     widget.task_title,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  Text(
-                    widget.task_description,
-                    style: const TextStyle(color: Colors.grey),
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      widget.task_description,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                   )
                 ],
               ),

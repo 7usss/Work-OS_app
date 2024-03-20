@@ -61,7 +61,7 @@ class _company_user_listState extends State<company_user_list> {
                 child: InkWell(
                   // onTap: whatsUppfun,
                   child: Image.network(
-                    'https://cdn.discordapp.com/attachments/679377927611351119/1077036608500539432/86.png',
+                    'https://imgs.search.brave.com/3LdTtWOHApyI__t3Vd2d8Ysb7r3YV6aX4Np2O7c92Mk/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9wbmdp/bWcuY29tL3VwbG9h/ZHMvd2hhdHNhcHAv/d2hhdHNhcHBfUE5H/MTUucG5n',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -90,9 +90,9 @@ class _company_user_listState extends State<company_user_list> {
             const Spacer(
               flex: 14,
             ),
-            InkWell(
+            const InkWell(
               // onTap: mailfun,
-              child: const Icon(
+              child: Icon(
                 Icons.email_outlined,
                 color: Color.fromARGB(255, 0, 40, 66),
               ),
