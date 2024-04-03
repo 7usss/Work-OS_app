@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project4/componant/const.dart';
 import 'package:project4/componant/text1.dart';
 import 'package:project4/pages/task_details_page.dart';
 import 'package:uuid/uuid.dart';
@@ -27,6 +28,28 @@ class _HomePageState extends State<HomePage> {
   DateTime? pick;
   Timestamp? TaskDeadLineTimeStamp;
   String? categoryfilter1;
+  String? userImage;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    getImage();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  getImage() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      try {
+        final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('UserData').doc(uid).get();
+        userImage = userDoc.get('image_url');
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -46,9 +69,7 @@ class _HomePageState extends State<HomePage> {
       height: double.infinity,
       decoration: const BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color.fromARGB(255, 77, 169, 255), Color(0xff63B8C3)])),
+              begin: Alignment.centerLeft, end: Alignment.centerRight, colors: Const.mainGradiantColors)),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue.shade300,
@@ -97,7 +118,9 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
               );
             } else if (snapshot.connectionState == ConnectionState.active) {
               {
@@ -111,6 +134,7 @@ class _HomePageState extends State<HomePage> {
                           task_id: snapshot.data!.docs[index]['taskId'],
                           task_uploadBy: snapshot.data!.docs[index]['uploadedBy'],
                           task_state: snapshot.data!.docs[index]['isDone'],
+                          userImage: snapshot.data!.docs[index]['userImage'],
                         );
                       });
                 } else {
@@ -281,34 +305,7 @@ class _HomePageState extends State<HomePage> {
                             webBgColor: 'linear-gradient(to right, #DE9905, #EFB947)',
                             fontSize: 16.0);
                       } else {
-                        final FirebaseAuth auth = FirebaseAuth.instance;
-                        User? user = auth.currentUser;
-                        String uid = user!.uid;
-                        final taskid = const Uuid().v4();
-                        await FirebaseFirestore.instance.collection('Tasks').doc(taskid).set({
-                          'taskId': taskid,
-                          'uploadedBy': uid,
-                          'taskTitle': control_TaskTitle.text,
-                          'taskDescription': control_TaskDiscription.text,
-                          'deadlineDate': control_TaskDeadLine.text,
-                          'deadlineDateTimeStamp': TaskDeadLineTimeStamp,
-                          'taskCategory': control_TaskCategory.text,
-                          'isDone': false,
-                          'createdAt': Timestamp.now(),
-                        });
-                        Fluttertoast.showToast(
-                            msg: "Task has been Upload successfully ",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 3,
-                            fontSize: 16.0);
-                        Navigator.pop(context);
-                        control_TaskTitle.clear();
-                        control_TaskDiscription.clear();
-                        setState(() {
-                          control_TaskCategory.text = 'Category';
-                          control_TaskDeadLine.text = 'Pick a date';
-                        });
+                        await post(context);
                       }
                     },
                     child: Container(
@@ -338,6 +335,43 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  Future<void> post(BuildContext context) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String uid = user!.uid;
+    final taskid = const Uuid().v4();
+    List<Map<String, dynamic>> dataList = [
+      {'commentBody': '', 'commentId': '', 'name': '', 'time': '', 'uploadedBy': '', 'userImage': ''},
+    ];
+    List<dynamic> firestoreData = List<dynamic>.from(dataList);
+    await FirebaseFirestore.instance.collection('Tasks').doc(taskid).set({
+      'taskId': taskid,
+      'uploadedBy': uid,
+      'taskTitle': control_TaskTitle.text,
+      'taskDescription': control_TaskDiscription.text,
+      'deadlineDate': control_TaskDeadLine.text,
+      'deadlineDateTimeStamp': TaskDeadLineTimeStamp,
+      'taskCategory': control_TaskCategory.text,
+      'taskComments': firestoreData,
+      'userImage': userImage,
+      'isDone': false,
+      'createdAt': Timestamp.now(),
+    });
+    Fluttertoast.showToast(
+        msg: "Task has been Upload successfully ",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        fontSize: 16.0);
+    Navigator.pop(context);
+    control_TaskTitle.clear();
+    control_TaskDiscription.clear();
+    setState(() {
+      control_TaskCategory.text = 'Category';
+      control_TaskDeadLine.text = 'Pick a date';
+    });
   }
 
   void ShowDialogFunction2(BuildContext context) {
@@ -505,6 +539,7 @@ class TaskInHome extends StatefulWidget {
 
   final String task_id;
   final bool task_state;
+  final String userImage;
   const TaskInHome({
     super.key,
     required this.task_title,
@@ -512,6 +547,7 @@ class TaskInHome extends StatefulWidget {
     required this.task_description,
     required this.task_id,
     required this.task_state,
+    required this.userImage,
   });
 
   @override
@@ -574,6 +610,7 @@ class _TaskInHomeState extends State<TaskInHome> {
           return TaskDetailsPage(
             task__id: widget.task_id,
             taskuploadedBy: widget.task_uploadBy,
+            userImage: widget.userImage,
           );
         }));
       },

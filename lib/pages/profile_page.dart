@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project4/componant/const.dart';
+import 'package:project4/componant/larg_button.dart';
 
 import 'login_page.dart';
 
@@ -66,9 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
       height: double.infinity,
       decoration: const BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color.fromARGB(255, 77, 169, 255), Color(0xff63B8C3)])),
+              begin: Alignment.centerLeft, end: Alignment.centerRight, colors: Const.mainGradiantColors)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -298,26 +298,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }));
                               });
                             },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 36),
-                              alignment: Alignment.center,
-                              height: 55,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(34),
-                                  gradient: const LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [Color.fromARGB(201, 241, 9, 9), Color.fromARGB(192, 221, 4, 4)])),
-                              child: const Text(
-                                'Log Out',
-                                style: TextStyle(
-                                  fontFamily: 'JosefinSans',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.white,
-                                ),
-                              ),
+                            child: const LargBotton(
+                              text: 'LogOut',
+                              colors: Const.logOutGradiantColors,
                             ),
                           ),
                         ),

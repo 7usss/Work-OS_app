@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class company_user_list extends StatefulWidget {
   final String user_id;
@@ -21,18 +23,23 @@ class company_user_list extends StatefulWidget {
 }
 
 class _company_user_listState extends State<company_user_list> {
-  // void mailfun() async {
+  // mailfun() async {
   //   final Uri params = Uri(
   //     scheme: 'mailto',
   //     path: widget.user_email,
   //   );
   //   String url = params.toString();
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
+  //   if (await canLaunchUrl(params)) {
+  //     await launchUrl(params);
   //   } else {
   //     throw 'Could not launch $url';
   //   }
   // }
+
+  // final Uri url = Uri(
+  //   scheme: 'mailto',
+  //   path: 'hasooooomi52@gmail.com',
+  // );
 
   // void whatsUppfun() async {
   //   await launch('https://wa.me/${widget.user_phoneNumber}?text=Hi');
@@ -90,9 +97,21 @@ class _company_user_listState extends State<company_user_list> {
             const Spacer(
               flex: 14,
             ),
-            const InkWell(
-              // onTap: mailfun,
-              child: Icon(
+            InkWell(
+              // onTap: () async {
+              //   if (await canLaunchUrl(url)) {
+              //     launchUrl(url);
+              //   } else {
+              //     await Fluttertoast.showToast(
+              //         msg: "Can't send this Email",
+              //         toastLength: Toast.LENGTH_LONG,
+              //         gravity: ToastGravity.CENTER,
+              //         timeInSecForIosWeb: 5,
+              //         webBgColor: 'linear-gradient(to right, #DE9905, #EFB947)',
+              //         fontSize: 16.0);
+              //   }
+              // },
+              child: const Icon(
                 Icons.email_outlined,
                 color: Color.fromARGB(255, 0, 40, 66),
               ),

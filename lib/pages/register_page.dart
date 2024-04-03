@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 // import 'package:image_picker_web/image_picker_web.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:project4/componant/const.dart';
+import 'package:project4/componant/text1.dart';
 import 'package:project4/my_app.dart';
 import 'package:uuid/uuid.dart';
 
@@ -121,9 +123,9 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 30,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
                   'Task Management',
                   style: TextStyle(
@@ -363,8 +365,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     imagePickerfromGalary();
                     Navigator.pop(context);
                   },
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Icon(
                         Icons.photo,
                         color: Color.fromARGB(255, 41, 61, 66),
@@ -382,8 +384,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       imagePickerfromCamera();
                       Navigator.pop(context);
                     },
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         Icon(
                           Icons.camera,
                           color: Color.fromARGB(255, 41, 61, 66),
@@ -406,8 +408,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                             Navigator.pop(context);
                           },
-                          child: Row(
-                            children: const [
+                          child: const Row(
+                            children: [
                               Icon(
                                 Icons.close,
                                 color: Color.fromARGB(255, 218, 35, 35),
@@ -429,7 +431,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Close'))
+                child: const Text1(
+                  text: 'Close',
+                  fontsized1: 18,
+                  color: Const.popTextColor,
+                ))
           ],
         );
       },
@@ -483,7 +489,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Close'))
+                  child: const Text1(
+                    text: 'Close',
+                    color: Const.popTextColor,
+                    fontsized1: 18,
+                  ))
             ],
           );
         });

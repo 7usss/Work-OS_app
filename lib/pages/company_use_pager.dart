@@ -14,12 +14,6 @@ class CompanyUserPage extends StatefulWidget {
 
 class _CompanyUserPageState extends State<CompanyUserPage> {
   String? name;
-  userdata() {}
-  @override
-  void initState() {
-    userdata();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

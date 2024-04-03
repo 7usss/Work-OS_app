@@ -16,6 +16,7 @@ class Text1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
+      overflow: TextOverflow.fade,
       text,
       style: TextStyle(color: color, fontSize: fontsized1, fontWeight: fontweights),
     );
